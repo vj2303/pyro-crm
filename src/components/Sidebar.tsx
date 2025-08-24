@@ -17,13 +17,24 @@ import {
   Settings, 
   LogOut,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  LucideIcon
 } from 'lucide-react';
+
+interface MenuItemType {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  href?: string;
+  expandable?: boolean;
+  expanded?: boolean;
+  subItems?: { label: string; href: string }[];
+}
 
 const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
     // Initialize from localStorage if available
     if (typeof window !== 'undefined') {
@@ -62,7 +73,7 @@ const Sidebar = () => {
     router.push('/login');
   };
 
-  const menuItems = [
+  const menuItems: MenuItemType[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
@@ -144,7 +155,7 @@ const Sidebar = () => {
     }
   ];
 
-  const bottomMenuItems = [
+  const bottomMenuItems: MenuItemType[] = [
     {
       id: 'integrations',
       label: 'Integrations',
@@ -159,7 +170,7 @@ const Sidebar = () => {
     }
   ];
 
-  const MenuItem = ({ item }: { item: any }) => {
+  const MenuItem = ({ item }: { item: MenuItemType }) => {
     const Icon = item.icon;
     const isActive = pathname === item.href;
     const isExpandable = item.expandable;
@@ -200,7 +211,7 @@ const Sidebar = () => {
         
         {isExpandable && isExpanded && item.subItems && (
           <div className="mt-2 ml-6 space-y-1">
-            {item.subItems.map((subItem: any, index: number) => (
+            {item.subItems.map((subItem: { label: string; href: string }, index: number) => (
               <Link
                 key={index}
                 href={subItem.href}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { CallLogsService, CallLog, CallLogsResponse, CallStatsResponse } from '@/services/callLogsService';
-import { Phone, Clock, User, MessageSquare, BarChart3, Activity } from 'lucide-react';
+import { Phone, Clock, MessageSquare, BarChart3 } from 'lucide-react';
 
 export default function CallsPage() {
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
@@ -138,7 +138,7 @@ export default function CallsPage() {
                   <div className="space-y-1">
                     {stats?.statusBreakdown && Object.entries(stats.statusBreakdown).map(([status, count]) => (
                       <div key={status} className="flex justify-between text-sm">
-                        <span className={`${CallLogsService.getStatusColor(status as any)}`}>
+                        <span className={`${CallLogsService.getStatusColor(status as CallLog['status'])}`}>
                           {status}
                         </span>
                         <span className="text-white">{count}</span>

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function SearchLeads() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,7 +37,7 @@ export default function SearchLeads() {
 
   const filters = ['Auto', 'Phone', 'Text', 'Phone', 'Email'];
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
     setShowResults(value.length > 0);
@@ -121,9 +122,11 @@ export default function SearchLeads() {
                     </div>
 
                     <div className="flex-shrink-0">
-                      <img
+                      <Image
                         src={lead.avatar}
                         alt={lead.name}
+                        width={48}
+                        height={48}
                         className="w-12 h-12 rounded-full object-cover border-2 border-gray-600"
                       />
                     </div>

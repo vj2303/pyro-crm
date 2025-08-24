@@ -96,7 +96,9 @@ export default function SignupPage() {
         setErrors({ submit: result.error || 'Registration failed' });
       }
     } catch (error) {
-      setErrors({ submit: 'An unexpected error occurred' });
+      console.error('Registration error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      setErrors({ submit: errorMessage });
     } finally {
       setIsSubmitting(false);
     }

@@ -29,7 +29,7 @@ const CallingCampaigns = () => {
     }
   ];
 
-  const ProgressCircle = ({ progress }) => {
+  const ProgressCircle = ({ progress }: { progress: number }) => {
     const radius = 18;
     const circumference = 2 * Math.PI * radius;
     const strokeDasharray = circumference;
