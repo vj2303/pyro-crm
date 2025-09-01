@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -46,6 +47,12 @@ function LoginForm() {
     }
 
     setErrors(newErrors);
+    // Show all validation errors via toasts
+    if (Object.keys(newErrors).length > 0) {
+      Object.values(newErrors).forEach((msg) => {
+        if (msg) toast.error(msg);
+      });
+    }
     return Object.keys(newErrors).length === 0;
   };
 
@@ -81,14 +88,18 @@ function LoginForm() {
 
       if (result.success) {
         console.log('Login successful, redirecting to dashboard...');
+        toast.success('Logged in successfully');
         router.push('/dashboard');
       } else {
-        setErrors({ submit: result.error || 'Login failed' });
+        const message = result.error || 'Login failed';
+        setErrors({ submit: message });
+        toast.error(message);
       }
     } catch (error) {
       console.error('Login error:', error);
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       setErrors({ submit: errorMessage });
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

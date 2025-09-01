@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -54,6 +55,12 @@ export default function SignupPage() {
     }
 
     setErrors(newErrors);
+    // Show all validation errors via toasts
+    if (Object.keys(newErrors).length > 0) {
+      Object.values(newErrors).forEach((msg) => {
+        if (msg) toast.error(msg);
+      });
+    }
     return Object.keys(newErrors).length === 0;
   };
 
@@ -91,14 +98,18 @@ export default function SignupPage() {
 
       if (result.success) {
         // Redirect to login page after successful registration
+        toast.success('Registration successful! Please log in.');
         router.push('/login?message=Registration successful! Please log in.');
       } else {
-        setErrors({ submit: result.error || 'Registration failed' });
+        const message = result.error || 'Registration failed';
+        setErrors({ submit: message });
+        toast.error(message);
       }
     } catch (error) {
       console.error('Registration error:', error);
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       setErrors({ submit: errorMessage });
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

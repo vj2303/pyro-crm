@@ -118,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         // Handle different possible API response structures
-        let userData, token;
+        let userData, token: string | undefined;
         
         if (result.user && result.token) {
           // Structure: { user: userData, token: token }
@@ -128,17 +128,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Structure: { data: { user: userData, token: token } }
           userData = result.data.user;
           token = result.data.token;
+        } else if (result.data && result.data.accessToken && result.data.user) {
+          // Common variant: { data: { user, accessToken } }
+          userData = result.data.user;
+          token = result.data.accessToken;
         } else if (result.token) {
           // Structure: { token: token, ...other user fields }
           token = result.token;
           userData = { ...result };
           delete userData.token; // Remove token from user data
+        } else if (result.user && result.accessToken) {
+          // Variant: { user, accessToken }
+          userData = result.user;
+          token = result.accessToken;
         } else {
-          // Fallback: assume the entire result is user data
-          userData = result;
-          token = 'dummy-token'; // Placeholder token
+          // No token present: treat as error
+          return { success: false, error: 'Login response did not include an auth token' };
         }
         
+        if (!token) {
+          return { success: false, error: 'Missing auth token from server response' };
+        }
+
         // Store user and token
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('token', token);
