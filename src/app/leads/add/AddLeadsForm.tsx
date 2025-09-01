@@ -1,10 +1,8 @@
 'use client'
 import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { API_BASE_URL, getAuthHeaders } from '@/services/api';
 
 export default function AddLeadsForm() {
-  const { isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',

@@ -338,7 +338,7 @@ export default function SearchLeads() {
               <p className="text-gray-400 text-sm">
                 Showing {filteredLeads.length} of {pagination.total} leads
                 {searchQuery && (
-                  <span> for "{searchQuery}"</span>
+                  <span> for &quot;{searchQuery}&quot;</span>
                 )}
               </p>
             </div>
